@@ -11,40 +11,44 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class SmileyFace extends JPanel implements Runnable {
+public class SmileyFaceWindow extends JPanel implements Runnable {
 	
 	private static final Color PURPLE = new Color(178, 102, 255);
 	private static Stroke penWidth = new BasicStroke(5);
+	private SmileyFaceGraphics smiley = new SmileyFaceGraphics();
+	
+	private static final int INCH = 72;
+	private static final Dimension  US_LETTER = new Dimension((int) (8.5*INCH), 11*INCH);
+	
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new SmileyFace());
+		SwingUtilities.invokeLater(new SmileyFaceWindow());
 	}
+	
 	@Override
 	public void run() {
 		JFrame frame = new JFrame("Smiley Face");
-		frame.setPreferredSize(new Dimension(500, 500));
+		this.setPreferredSize(US_LETTER);
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(this);
 		frame.pack();
 		frame.setVisible(true);
+		
 	}
 	protected void paintComponent (Graphics g){
 		Graphics2D g2 = (Graphics2D) g;
-		g2.setColor(Color.WHITE);
-		g2.fillRect(0,0,getWidth(), getHeight());
-		g2.setColor(PURPLE);
-		g2.fillOval(42, 30, 400, 400);
-		g2.setColor(Color.WHITE);
-		g2.fillOval(125, 125, 75, 125);
-		g2.fillOval(275, 125, 75, 125);
-		g2.setColor(Color.BLACK);
-		g2.fillOval(152, 187, 40, 60);
-		g2.fillOval(285, 187, 40, 60);
-		Stroke stroke = new BasicStroke(10);
-		g2.setStroke(penWidth);
-		g2.drawArc(150, 150, 200, 200, 225, 90);
-		g2.drawLine(215, 290, 250, 230);
-		g2.drawLine(215, 290, 250, 290);
+		this.setBackground(Color.WHITE);
+		
+		for(int i = INCH/2; i<US_LETTER.getWidth();i+=0.5*INCH){
+			g2.drawLine(i, 0,i,getHeight());
+		}
+		for(int i = INCH/2; i<US_LETTER.getHeight();i+=0.5*INCH){
+			g2.drawLine(0, i, getWidth(), i);
+		}
+		g2.translate(INCH, 0);
+		g2.rotate(Math.PI/2);
+		smiley.drawSelf(g2);
+		
 	}
 	
 
