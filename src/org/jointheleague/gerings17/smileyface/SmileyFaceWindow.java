@@ -107,7 +107,7 @@ public class SmileyFaceWindow extends JPanel implements Runnable {
 	}
 
 	private void drawMin(Graphics2D g2, int min, int sec) {
-		double minAngle = (PI / 30) * (min + (sec / 60));
+		double minAngle = (PI / 30) * (min + (sec / 60.0));
 
 		g2.rotate(minAngle);
 		g2.setStroke(penWidth);
