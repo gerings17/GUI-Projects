@@ -14,14 +14,18 @@ import javax.swing.SwingUtilities;
 public class FractalWindow extends JPanel implements Runnable {
 	private static final int MARGIN = 10;
 	private static final Random RNG = new Random();
-	private AffineTransform[] sierpinskiTransforms = new AffineTransform[] {
-			new AffineTransform(0.5, 0, 0, 0.5, .25, 0),
-			new AffineTransform(0.5, 0, 0, 0.5, 0, 0.5),
-			new AffineTransform(0.5, 0, 0, 0.5, 0.5, 0.5) };
 
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new FractalWindow());
+		SwingUtilities.invokeLater(new FractalWindow(new KocksSnowflake()));
 
+	}
+
+	private AffineTransform[] transforms;
+	private int level;
+	
+	public FractalWindow(FractalSpec spec){
+		this.transforms = spec.getTransformations();
+		this.level = spec.getLevel();
 	}
 
 	@Override
@@ -42,7 +46,7 @@ public class FractalWindow extends JPanel implements Runnable {
 		g2.fillRect(0, 0, getWidth(), getHeight());
 		g2.translate(MARGIN, MARGIN);
 		g2.scale(getWidth() - (2 * MARGIN), getHeight() - (2 * MARGIN));
-		drawFractal(g2, 10);
+		drawFractal(g2, level);
 		// g2.transform(new AffineTransform(0.5,0.6, -0.1, 0.8, 0.2, 0.1));
 		// g2.setColor(randomColor());
 		// g2.fillRect(0, 0, 1, 1);
@@ -54,8 +58,8 @@ public class FractalWindow extends JPanel implements Runnable {
 			g2.fillRect(0, 0, 1, 1);
 		} else {
 			AffineTransform standard = g2.getTransform();
-			for (int i = 0; i < sierpinskiTransforms.length; i++) {
-				g2.transform(sierpinskiTransforms[i]);
+			for (int i = 0; i < transforms.length; i++) {
+				g2.transform(transforms[i]);
 				g2.setColor(randomColor());
 				drawFractal(g2, level - 1);
 				g2.setTransform(standard);
